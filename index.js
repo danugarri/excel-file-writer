@@ -56,7 +56,7 @@ app.get('/excel', function (req, res) {
 app.post('/', function (req, res) {
   populateCellsPost(req.body);
   wb.write(`generated-file/${formattedDate}-danugarri-schedule.xlsx`);
-  res.send({ data: `${req.protocol}://${req.hostname}/excel` });
+  res.send({ data: `https://${req.hostname}/excel` });
   // res.send({ data: `${req.protocol}://${req.hostname}:${port}/excel` });
   // const data1={ data: `http://localhost:5000` }
 });
