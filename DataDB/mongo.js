@@ -28,12 +28,26 @@ const createEmployee = async (req, res) => {
     // And inside this collection we want to insert a new employee
     collection.insertOne(newEmployee);
     // And we return our newly created employee
-    res.json(newEmployee);
-    // To finish we have to close the connection to the database
-    // client.close();
   } catch (error) {
     return res.json({ message: 'We could not store data' });
   }
+  res.json(newEmployee);
+  // To finish we have to close the connection to the database
+  // client.close();
 };
-
+const getEmployees = async (req, res) => {
+  const client = new MongoClient(url);
+  let employees = [];
+  try {
+    await client.connect();
+    const db = client.db();
+    employees = await db.collection('employees').find().toArray();
+  } catch (error) {
+    return res.json({ message: 'We could not get data' });
+  }
+  res.json(employees);
+  // To finish we have to close the connection to the database
+  client.close();
+};
 exports.createEmployee = createEmployee;
+exports.getEmployees = getEmployees;

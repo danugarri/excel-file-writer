@@ -62,3 +62,4 @@ app.post('/', function (req, res) {
   // const data1={ data: `http://localhost:5000` }
 });
 app.post('/employee', MongoFunctions.createEmployee);
+app.get('/employee', MongoFunctions.getEmployees);
