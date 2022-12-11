@@ -1,11 +1,7 @@
-const Mongo = require('mongodb');
-// We have to access the MongoClient class from this Mongo instance
-const MongoClient = Mongo.MongoClient;
-const url =
-  'mongodb+srv://admin:Boomerang.zaida91@first-cluster.f7gsclw.mongodb.net/employees-database?retryWrites=true&w=majority';
+const { client } = require('./config');
 
+// All this kind of queries are asynchronous
 // function to create employee
-// All thid kind of querries are asynchronous
 const createEmployee = async (req, res) => {
   // Object we are retrieving from the request( Frontend)
   // And afterwards this object will be sent to our database
@@ -13,8 +9,7 @@ const createEmployee = async (req, res) => {
     color: req.body.color,
     newEmployee: req.body.employeeName,
   };
-  // We must tell to MongoDb which server we want to connect to
-  const client = new MongoClient(url);
+
   //   ## stablishig CONNECTION ##
   //   Preventing form errors whrn creating an employee
   try {
@@ -36,7 +31,6 @@ const createEmployee = async (req, res) => {
   // client.close();
 };
 const getEmployees = async (req, res) => {
-  const client = new MongoClient(url);
   let employees = [];
   try {
     await client.connect();
