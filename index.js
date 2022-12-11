@@ -6,6 +6,7 @@ const { getStyles } = require('./set-up/excel-styles');
 const { getExcel } = require('./set-up/set-up');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const MongoFunctions = require('./DataDB/mongo');
 
 const app = express();
 app.use(bodyParser.json());
@@ -60,6 +61,4 @@ app.post('/', function (req, res) {
   // res.send({ data: `${req.protocol}://${req.hostname}:${port}/excel` });
   // const data1={ data: `http://localhost:5000` }
 });
-app.post('/employee', function (req, res) {
-  res.send({ data: 'Employee received' });
-});
+app.post('/employee', MongoFunctions.createEmployee);
