@@ -62,6 +62,4 @@ app.post('/', function (req, res) {
 });
 app.post('/employee', function (req, res) {
   res.send({ data: 'Employee received' });
-  // res.send({ data: `${req.protocol}://${req.hostname}:${port}/excel` });
-  // const data1={ data: `http://localhost:5000` }
 });
