@@ -26,7 +26,7 @@ const createEmployee = async (req, res) => {
   } catch (error) {
     return res.json({ message: 'We could not store data' });
   }
-  res.json({ data: newEmployee });
+  res.json(newEmployee);
   // To finish we have to close the connection to the database
   // client.close();
 };
