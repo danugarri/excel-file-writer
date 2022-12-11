@@ -7,7 +7,7 @@ const createEmployee = async (req, res) => {
   // And afterwards this object will be sent to our database
   const newEmployee = {
     color: req.body.color,
-    newEmployee: req.body.employeeName,
+    employeeName: req.body.employeeName,
   };
 
   //   ## stablishig CONNECTION ##
@@ -26,7 +26,7 @@ const createEmployee = async (req, res) => {
   } catch (error) {
     return res.json({ message: 'We could not store data' });
   }
-  res.json(newEmployee);
+  res.json({ data: newEmployee });
   // To finish we have to close the connection to the database
   // client.close();
 };
