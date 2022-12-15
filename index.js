@@ -63,3 +63,4 @@ app.post('/', function (req, res) {
 });
 app.post('/employee', MongoFunctions.createEmployee);
 app.get('/employee', MongoFunctions.getEmployees);
+app.delete('/employee', MongoFunctions.deleteEmployees);
