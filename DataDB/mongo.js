@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const { client } = require('./config');
 
 // All this kind of queries are asynchronous
@@ -46,7 +47,7 @@ const getEmployees = async (req, res) => {
 const deleteEmployees = async (req, res) => {
   // Object we are retrieving from the request( Frontend)
   // And afterwards this object will be sent to our database
-  const query = { color: req.body.color, employeeName: req.body.employeeName };
+  const query = { _id: ObjectId(req.body.id) };
 
   //   ## stablishig CONNECTION ##
   //   Preventing form errors whrn creating an employee
