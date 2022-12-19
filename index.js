@@ -7,6 +7,7 @@ const { getExcel } = require('./set-up/set-up');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const MongoFunctions = require('./DataDB/mongo');
+const { getEmployeesInternally } = require('./DataDB/service/getEmployees');
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,6 +25,8 @@ app.use(function (req, res, next) {
 app.listen(port, function () {
   console.log('App listening on port 5000!');
 });
+
+getEmployeesInternally();
 
 const populateCellsPost = (data) => {
   let counter = 1;
