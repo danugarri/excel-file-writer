@@ -1,3 +1,4 @@
+const { getEmployeesInternally } = require('../DataDB/service/getEmployees');
 const { getExcel } = require('./set-up');
 
 const { wb } = getExcel();
@@ -31,4 +32,28 @@ const getStyles = () => {
   return { headerStyle, cellsStyle };
 };
 
-module.exports = { getStyles };
+const getCustomStyle = (employeeName) => {
+  const employeesList = getEmployeesInternally();
+
+  const matchedEmployee = employeesList.find((employee) => employee.employeeName === employeeName);
+
+  const employeeNameCellsStyle = wb.createStyle({
+    font: {
+      color: '#000000',
+      size: 12,
+    },
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      fgColor: matchedEmployee.color,
+    },
+    alignment: {
+      shrinkToFit: true,
+      wrapText: true,
+    },
+  });
+
+  return employeeNameCellsStyle;
+};
+
+module.exports = { getStyles, getCustomStyle };

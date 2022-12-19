@@ -2,12 +2,11 @@
 const express = require('express');
 const { headers } = require('./consts');
 const { getDate } = require('./helpers/getDate');
-const { getStyles } = require('./set-up/excel-styles');
+const { getStyles, getCustomStyle } = require('./set-up/excel-styles');
 const { getExcel } = require('./set-up/set-up');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const MongoFunctions = require('./DataDB/mongo');
-const { getEmployeesInternally } = require('./DataDB/service/getEmployees');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +14,7 @@ const { wb, ws } = getExcel();
 const port = 5000;
 const formattedDate = getDate();
 const { headerStyle, cellsStyle } = getStyles();
+
 // CORS
 app.use(cors({ exposedHeaders: '*' }));
 app.use(function (req, res, next) {
@@ -26,15 +26,13 @@ app.listen(port, function () {
   console.log('App listening on port 5000!');
 });
 
-getEmployeesInternally();
-
 const populateCellsPost = (data) => {
   let counter = 1;
-
   data.forEach((employee) => {
     counter++;
     let index = 0;
     for (const property in employee) {
+      const employeeNameCellsStyle = getCustomStyle(employee['Employee']);
       index++;
       //  write headers
       ws.cell(1, index)
@@ -43,6 +41,7 @@ const populateCellsPost = (data) => {
       // Write cells
       if (typeof employee[property] === 'string') {
         ws.cell(counter, index).string(employee[property]).style(cellsStyle);
+        ws.cell(counter, index).string(employee['Employee']).style(employeeNameCellsStyle);
       } else {
         ws.cell(counter, index).number(employee[property]).style(cellsStyle);
       }
