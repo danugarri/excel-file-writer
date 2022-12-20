@@ -29,22 +29,26 @@ app.listen(port, function () {
 const populateCellsPost = (data) => {
   let counter = 1;
   data.forEach(async (employee) => {
-    const employeeNameCellsStyle = await getCustomStyle(employee['Employee']);
-    counter++;
-    let index = 0;
-    for (const property in employee) {
-      index++;
-      //  write headers
-      ws.cell(1, index)
-        .string(headers[index - 1])
-        .style(headerStyle);
-      // Write cells
-      if (typeof employee[property] === 'string') {
-        ws.cell(counter, index).string(employee[property]).style(cellsStyle);
-        ws.cell(counter, 1).string(employee['Employee']).style(employeeNameCellsStyle);
-      } else {
-        ws.cell(counter, index).number(employee[property]).style(cellsStyle);
+    try {
+      const employeeNameCellsStyle = await getCustomStyle(employee['Employee']);
+      counter++;
+      let index = 0;
+      for (const property in employee) {
+        index++;
+        //  write headers
+        ws.cell(1, index)
+          .string(headers[index - 1])
+          .style(headerStyle);
+        // Write cells
+        if (typeof employee[property] === 'string') {
+          ws.cell(counter, index).string(employee[property]).style(cellsStyle);
+          ws.cell(counter, 1).string(employee['Employee']).style(employeeNameCellsStyle);
+        } else {
+          ws.cell(counter, index).number(employee[property]).style(cellsStyle);
+        }
       }
+    } catch (e) {
+      console.log(e);
     }
   });
 };
@@ -59,8 +63,8 @@ app.get('/excel', function (req, res) {
 app.post('/', function (req, res) {
   populateCellsPost(req.body);
   wb.write(`generated-file/${formattedDate}-danugarri-schedule.xlsx`);
-  // res.send({ data: `https://${req.hostname}/excel` });
-  res.send({ data: `${req.protocol}://${req.hostname}:${port}/excel` });
+  res.send({ data: `https://${req.hostname}/excel` });
+  // res.send({ data: `${req.protocol}://${req.hostname}:${port}/excel` });
   // const data1={ data: `http://localhost:5000` }
 });
 app.post('/employee', MongoFunctions.createEmployee);
