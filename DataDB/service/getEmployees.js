@@ -9,9 +9,10 @@ const getEmployeesInternally = async () => {
   } catch (error) {
     return 'We could not get data';
   }
-  console.log(employees);
-  // To finish we have to close the connection to the database
+  //   console.log(employees);
+
   client.close();
+
   return employees;
 };
 

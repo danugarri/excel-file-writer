@@ -32,10 +32,13 @@ const getStyles = () => {
   return { headerStyle, cellsStyle };
 };
 
-const getCustomStyle = (employeeName) => {
-  const employeesList = getEmployeesInternally();
+const getCustomStyle = async (employeeName) => {
+  const employeesList = await getEmployeesInternally();
 
-  const matchedEmployee = employeesList.find((employee) => employee.employeeName === employeeName);
+  const matchedEmployee =
+    employeesList && employeesList.find((employee) => employee.employeeName === employeeName);
+  console.log('\n\x1b[32m Matches found: \x1b[0m');
+  console.log(matchedEmployee);
 
   const employeeNameCellsStyle = wb.createStyle({
     font: {
