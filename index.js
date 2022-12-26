@@ -7,6 +7,7 @@ const { getExcel } = require('./set-up/set-up');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const MongoFunctions = require('./DataDB/mongo');
+const { getEmployeesInternally } = require('./DataDB/service/getEmployees');
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,11 +27,11 @@ app.listen(port, function () {
   console.log('App listening on port 5000!');
 });
 
-const populateCellsPost = (data) => {
+const populateCellsPost = (data, employeesList) => {
   let counter = 1;
   data.forEach(async (employee) => {
     try {
-      const employeeNameCellsStyle = await getCustomStyle(employee['Employee']);
+      const employeeNameCellsStyle = await getCustomStyle(employee['Employee'], employeesList);
       counter++;
       let index = 0;
       for (const property in employee) {
@@ -42,7 +43,9 @@ const populateCellsPost = (data) => {
         // Write cells
         if (typeof employee[property] === 'string') {
           ws.cell(counter, index).string(employee[property]).style(cellsStyle);
-          ws.cell(counter, 1).string(employee['Employee']).style(employeeNameCellsStyle);
+          if (employee['Employee']) {
+            ws.cell(counter, index).string(employee['Employee']).style(employeeNameCellsStyle);
+          }
         } else {
           ws.cell(counter, index).number(employee[property]).style(cellsStyle);
         }
@@ -60,8 +63,9 @@ app.get('/excel', function (req, res) {
   wb.write(`${formattedDate}-danugarri-schedule.xlsx`, res);
   // populateCells();
 });
-app.post('/', function (req, res) {
-  populateCellsPost(req.body);
+app.post('/', async function (req, res) {
+  const employeesList = await getEmployeesInternally();
+  populateCellsPost(req.body, employeesList);
   wb.write(`generated-file/${formattedDate}-danugarri-schedule.xlsx`);
   res.send({ data: `https://${req.hostname}/excel` });
   // res.send({ data: `${req.protocol}://${req.hostname}:${port}/excel` });
