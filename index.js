@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const MongoFunctions = require('./DataDB/mongo');
 const { getEmployeesInternally } = require('./DataDB/service/getEmployees');
+const { deleteFile } = require('./helpers/deleteFile');
 
 const app = express();
 app.use(bodyParser.json());
@@ -60,11 +61,13 @@ app.get('/', function (req, res) {
   res.redirect('/excel');
 });
 app.get('/excel', function (req, res) {
+  deleteFile(`${formattedDate}-danugarri-schedule.xlsx`);
   wb.write(`${formattedDate}-danugarri-schedule.xlsx`, res);
   // populateCells();
 });
 app.post('/', async function (req, res) {
-  const employeesList = await getEmployeesInternally();
+  let employeesList = [];
+  employeesList = await getEmployeesInternally();
   populateCellsPost(req.body, employeesList);
   wb.write(`generated-file/${formattedDate}-danugarri-schedule.xlsx`);
   res.send({ data: `https://${req.hostname}/excel` });
