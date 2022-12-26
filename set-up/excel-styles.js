@@ -47,7 +47,7 @@ const getCustomStyle = async (employeeName, employeesList) => {
       fill: {
         type: 'pattern',
         patternType: 'solid',
-        fgColor: matchedEmployee.color,
+        fgColor: matchedEmployee !== undefined ? matchedEmployee.color : 'FFFFFF',
       },
       alignment: {
         shrinkToFit: true,
